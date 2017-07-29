@@ -15,17 +15,6 @@ def lambda_handler(event, context):
     table.put_item(
         Item={
             'id' : recordId,
-            'text' : text,
-            'voice' : voice,
-            'status' : 'PROCESSING'
+            'username' : username
         }
     )
-    
-    #Sending notification about new post to SNS
-    client = boto3.client('sns')
-    client.publish(
-        TopicArn = os.environ['SNS_TOPIC'],
-        Message = recordId
-    )
-    
-    return recordId
