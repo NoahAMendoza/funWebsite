@@ -22,7 +22,7 @@ provider:
   runtime: python2.7
   environment:
     USER_TABLE_NAME: usersTable
-
+    RESERVATION_TABLE_NAME: reservationsTable
 # you can overwrite defaults here
 #  stage: dev
 #  region: us-east-1
@@ -127,13 +127,30 @@ resources:
       Properties:
         TableName: {self:environment.USER_TABLE_NAME}
         AttributeDefinitions:
-          - AttributeName: name
-            AttributeType: S
-          - AttributeName: email
+          - AttributeName: username
             AttributeType: S
         KeySchema:
-          - AttributeName: email
-            KeyType: S
+          - AttributeName: id
+            KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    reservationsTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+          TableName: {self:environment.RESERVATION_TABLE_NAME}
+          AttributeDefinitions:
+            - AttributeName: playerOne
+              AttributeType: HASH
+            - AttributeName: playerTwo
+              AttributeType: HASH
+            - AttributeName: startTime
+              AttributeType: S
+            - AttributeName: endTime
+              AttrubuteType: S
+          KeySchema:
+            - AttributeName: id
+              KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
