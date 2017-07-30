@@ -55,8 +55,24 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  create_user:
+    handler: createUser.lambda_handler
+    event:
+      - http:
+        path: users/create
+        method: get
+  get_users:
+    handler: getUsers.lambda_handler
+    event:
+      - http:
+        path: users/get
+        method: get
+  create_reservation:
+    handler: createReservation.lambda_handler
+    event:
+      - http:
+        path: reservations/create
+        method: get
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -101,3 +117,21 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: S
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
